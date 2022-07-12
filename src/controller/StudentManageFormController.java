@@ -54,6 +54,15 @@ public class StudentManageFormController {
     }
 
     public void btnDeleteOnAction(ActionEvent actionEvent) {
+        try {
+            if (CrudUtil.execute("DELETE FROM ijse.student WHERE student_id=?",txtStuId.getText())){
+                new Alert(Alert.AlertType.CONFIRMATION,"Saved").show();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void btnSaveOnAction(ActionEvent actionEvent) throws IOException {
