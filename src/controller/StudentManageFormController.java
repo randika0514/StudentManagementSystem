@@ -72,7 +72,7 @@ public class StudentManageFormController {
         tblStudent.setItems(obList);
     }
 
-    public void btnUpdateOnAction(ActionEvent actionEvent) {
+    public void btnUpdateOnAction(ActionEvent actionEvent) throws IOException {
         Student s = new Student(
                 txtStuId.getText(),txtStuName.getText(),txtStuEmail.getText(),txtStuContact.getText(),txtStuAddress.getText(),txtStuNic.getText()
         );
@@ -90,9 +90,13 @@ public class StudentManageFormController {
             e.printStackTrace();
         }
 
+        studentContext.getChildren().clear();
+        Parent parent = FXMLLoader.load(getClass().getResource("../view/StudentManageForm.fxml"));
+        studentContext.getChildren().add(parent);
+
     }
 
-    public void btnDeleteOnAction(ActionEvent actionEvent) {
+    public void btnDeleteOnAction(ActionEvent actionEvent) throws IOException {
         try {
             if (CrudUtil.execute("DELETE FROM ijse.student WHERE student_id=?",txtStuId.getText())){
                 new Alert(Alert.AlertType.CONFIRMATION,"Saved").show();
@@ -102,6 +106,10 @@ public class StudentManageFormController {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        studentContext.getChildren().clear();
+        Parent parent = FXMLLoader.load(getClass().getResource("../view/StudentManageForm.fxml"));
+        studentContext.getChildren().add(parent);
     }
 
     public void btnSaveOnAction(ActionEvent actionEvent) throws IOException {
