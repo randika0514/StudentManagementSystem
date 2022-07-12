@@ -33,6 +33,23 @@ public class StudentManageFormController {
     public TextField txtSearch;
 
     public void btnUpdateOnAction(ActionEvent actionEvent) {
+        Student s = new Student(
+                txtStuId.getText(),txtStuName.getText(),txtStuEmail.getText(),txtStuContact.getText(),txtStuAddress.getText(),txtStuNic.getText()
+        );
+
+        try {
+          boolean isUpdated = CrudUtil.execute("UPDATE ijse.student SET student_name=? , email=? , contact=? , address=? , nic=? WHERE student_id=?",s.getStuName(),s.getStuEmail(),s.getContact(),s.getAddress(),s.getNic(),s.getStuId());
+            if (isUpdated){
+                new Alert(Alert.AlertType.CONFIRMATION,"Updated..").show();
+            }else {
+                new Alert(Alert.AlertType.WARNING,"Try Again..").show();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void btnDeleteOnAction(ActionEvent actionEvent) {
