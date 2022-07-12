@@ -12,6 +12,7 @@ import model.Student;
 import util.CrudUtil;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class StudentManageFormController {
@@ -77,5 +78,26 @@ public class StudentManageFormController {
     }
 
     public void btnSearch(ActionEvent actionEvent) {
+        try {
+            search();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void search() throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = CrudUtil.execute("SELECT * FROM ijse.student WHERE student_id=?",txtSearch.getText());
+        if (resultSet.next()){
+            txtStuId.setText(resultSet.getString(1));
+            txtStuName.setText(resultSet.getString(2));
+            txtStuEmail.setText(resultSet.getString(3));
+            txtStuContact.setText(resultSet.getString(4));
+            txtStuAddress.setText(resultSet.getString(5));
+            txtStuNic.setText(resultSet.getString(6));
+        }else {
+            new Alert(Alert.AlertType.WARNING,"Empty..").show();
+        }
     }
 }
