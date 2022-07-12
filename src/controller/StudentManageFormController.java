@@ -1,5 +1,7 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import model.Student;
 import util.CrudUtil;
@@ -32,6 +35,42 @@ public class StudentManageFormController {
     public TableColumn colAddress;
     public TableColumn colNic;
     public TextField txtSearch;
+
+    public void initialize(){
+        colId.setCellValueFactory(new PropertyValueFactory("stuId"));
+        colName.setCellValueFactory(new PropertyValueFactory("stuName"));
+        colEmail.setCellValueFactory(new PropertyValueFactory("stuEmail"));
+        colContact.setCellValueFactory(new PropertyValueFactory("contact"));
+        colAddress.setCellValueFactory(new PropertyValueFactory("address"));
+        colNic.setCellValueFactory(new PropertyValueFactory("nic"));
+
+        try {
+            loadAllStudent();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadAllStudent() throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = CrudUtil.execute("SELECT * FROM ijse.student");
+        ObservableList<Student> obList = FXCollections.observableArrayList();
+
+        while (resultSet.next()){
+            obList.add(
+                    new Student(
+                            resultSet.getString(1),
+                            resultSet.getString(2),
+                            resultSet.getString(3),
+                            resultSet.getString(4),
+                            resultSet.getString(5),
+                            resultSet.getString(6)
+                    )
+            );
+        }
+        tblStudent.setItems(obList);
+    }
 
     public void btnUpdateOnAction(ActionEvent actionEvent) {
         Student s = new Student(
